@@ -4,8 +4,8 @@ import numpy as np
 
 def read_image(path, size):
     img = cv2.imread(path, cv2.IMREAD_COLOR)
-    if size != (0, 0):
-        img = cv2.resize(img, size, interpolation=cv2.INTER_LANCZOS4)
+    #if size != (0, 0):
+    #    img = cv2.resize(img, size, interpolation=cv2.INTER_LANCZOS4)
     m, n, k = img.shape
     mask = np.zeros((m, n))
     for i in range(m):
