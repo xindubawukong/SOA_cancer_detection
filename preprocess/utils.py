@@ -15,7 +15,7 @@ def read_image(path, size):
             mask[i][j] = 1
             img[i][j] = [0, 0, 0]
                 
-    cv2.imwrite('why.png', img)
+    #cv2.imwrite('why.png', img)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).astype(int)
     
     return img, mask

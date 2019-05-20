@@ -7,7 +7,6 @@
 from utils import *
 import numpy as np
 from queue import Queue
-import matplotlib.pyplot as plt
 
 #get_ipython().run_line_magic('load_ext', 'autoreload')
 #get_ipython().run_line_magic('autoreload', '2')
@@ -95,7 +94,7 @@ def convert_img(path, size):
 	#print(miny)
 	#print(maxx)
 	#print(maxy)
-	cv2.imwrite('test.png', f[minx:maxx][miny:maxy]) 			
+	#cv2.imwrite('test.png', f[minx:maxx][miny:maxy]) 			
 
 
 	# In[25]:
@@ -172,6 +171,7 @@ def convert_img(path, size):
 	#cv2.imwrite('dst.png', dst2)
 	#show(dst)
 	#show(dst2)
-	return dst2[minx:maxx][miny:maxy]
+	cv2.imwrite('dst.png', dst2)
+	return dst2
 
 #convert_img('temp.png', (512, 512))
