@@ -6,7 +6,11 @@
 
 from utils import *
 import numpy as np
-from Queue import Queue
+import six
+if six.PY2:
+	from Queue import Queue
+else:
+	from queue import Queue
 
 #get_ipython().run_line_magic('load_ext', 'autoreload')
 #get_ipython().run_line_magic('autoreload', '2')
@@ -57,7 +61,7 @@ def show(img):
 
 def convert_img(path, size):
 	img, del_mask = read_image(path, size)
-	#print(del_mask)
+	# print(del_mask.nonzero())
 	#show(img)
 	#print(img)
 	belong, K = getROI(img)
@@ -136,7 +140,7 @@ def convert_img(path, size):
 				maxxx = num[i]
 				threhold[k] = i
 		
-	#print(threhold)
+	# print(threhold)
 	#print(num[threhold[1]])
 	#print(num)
 
@@ -150,6 +154,8 @@ def convert_img(path, size):
 			#if ( threhold[0] >= f[i, j] >=0) | (threhold[1] >= f[i, j] >= 194) | (threhold[2] >= f[i, j] > 200):
 			#if (threhold[1] >= f[i, j] > 100):
 			if f[i, j] in threhold[1:]:
+				if f[i, j] == 0:
+					continue
 				mask[i , j] = 1
 				
 	kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
@@ -165,14 +171,15 @@ def convert_img(path, size):
 	dilation = dilation.astype(np.uint8)
 	#mask = np.zeros((m,n))
 	mask = (dilation==1) | (del_mask==1)
+	# mask = del_mask
 	mask = mask.astype(np.uint8)
 	f_binary = f_binary.astype(np.uint8)
 	#img = img.astype(np.uint8)
-	#dst = cv2.inpaint(img, dilation, 1, cv2.INPAINT_TELEA)
-	dst2 = cv2.inpaint(f_binary, mask, 1, cv2.INPAINT_NS)
+	# dst2 = cv2.inpaint(f_binary, mask, 1, cv2.INPAINT_NS)
+	dst2 = cv2.inpaint(f_binary, mask, 1, cv2.INPAINT_TELEA)
 	#cv2.imwrite('dst123.png', dst2[minx:maxx][miny:maxy])
 	#dst2 = cv2.resize(dst2[minx:maxx][miny:maxy], size, interpolation=cv2.INTER_LANCZOS4)
-	#cv2.imwrite('dst.png', dst2)
+	# cv2.imwrite('dst.png', dst2)
 	#show(dst)
 	#show(dst2)
 
@@ -219,8 +226,9 @@ def convert_img(path, size):
 
 
 if __name__ == '__main__':
-    convert_img('test1.png', (512, 512))
-    convert_img('test2.png', (512, 512))
-    convert_img('test3.png', (512, 512))
-    convert_img('test4.png', (512, 512))
-    convert_img('test5.png', (512, 512))
+    # convert_img('test1.png', (512, 512))
+    # convert_img('test2.png', (512, 512))
+    # convert_img('test3.png', (512, 512))
+    # convert_img('test4.png', (512, 512))
+    # convert_img('test5.png', (512, 512))
+	convert_img('1.bmp', (512, 512))
