@@ -6,7 +6,7 @@
 
 from utils import *
 import numpy as np
-from queue import Queue
+from Queue import Queue
 
 #get_ipython().run_line_magic('load_ext', 'autoreload')
 #get_ipython().run_line_magic('autoreload', '2')
@@ -214,11 +214,13 @@ def convert_img(path, size):
 	
 	dst2 = dst2[left+10:right-10, up+10:down-10]
 
-	cv2.imwrite('result_' + path, dst2)
+	# cv2.imwrite('result_' + path, dst2)
 	return dst2
 
 
 if __name__ == '__main__':
-	# convert_img('test1.png', (512, 512))
-	# convert_img('test2.png', (512, 512))
-	convert_img('test5.png', (512, 512))
+    convert_img('test1.png', (512, 512))
+    convert_img('test2.png', (512, 512))
+    convert_img('test3.png', (512, 512))
+    convert_img('test4.png', (512, 512))
+    convert_img('test5.png', (512, 512))
