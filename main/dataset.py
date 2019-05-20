@@ -37,12 +37,58 @@ class TrainDataset(Dataset):
         return torch.from_numpy(image), torch.Tensor([label]).long()
 
 
+# Valid dataset for pytorch input.
+class ValidDataset(Dataset):
+
+    def __init__(self, data_list):
+        self.images = []
+        for data in data_list:
+            image_path = data.image_path
+            self.images.append((image_path, data.subtype))
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, item):
+        image_path, label = self.images[item]
+        image = read_image(image_path)
+        image = get_gray(image)  # No need to do this if the input image is gray
+        image = cv2.resize(image, (512, 512))
+        image = image[None, :]
+        image = (image / 255.0).astype(np.float32)
+        return torch.from_numpy(image), torch.Tensor([label]).long()
+
+
+# Test dataset for pytorch input.
+class TestDataset(Dataset):
+
+    def __init__(self, data_list):
+        self.images = []
+        for data in data_list:
+            image_path = data.image_path
+            self.images.append(image_path)
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, item):
+        image_path = self.images[item]
+        image = read_image(image_path)
+        image = get_gray(image)  # No need to do this if the input image is gray
+        image = cv2.resize(image, (512, 512))
+        image = image[None, :]
+        image = (image / 255.0).astype(np.float32)
+        return torch.from_numpy(image)
+
+
 if __name__ == '__main__':
     train_path = '/Users/xdbwk/Desktop/thu32/soa/final-project/cancer_detection/train'
     test_path = '/Users/xdbwk/Desktop/thu32/soa/final-project/cancer_detection/test'
     cd = CancerDetection()
     cd.load_original_data(train_path, test_path)
     trainset = TrainDataset(cd.train_data)
-    for image, label in trainset:
+    validset = ValidDataset(cd.valid_data)
+    testset = TestDataset(cd.test_data)
+    for image, label in validset:
         print(image.size(), label)
         break

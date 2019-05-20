@@ -80,8 +80,12 @@ class CancerDetection(object):
 
 
 if __name__ == '__main__':
-    train_path = '/Users/xdbwk/Desktop/thu32/soa/final-project/cancer_detection/train'
-    test_path = '/Users/xdbwk/Desktop/thu32/soa/final-project/cancer_detection/test'
+    train_path = '/Users/xdbwk/Desktop/thu32/soa/cancer_detection/train'
+    test_path = '/Users/xdbwk/Desktop/thu32/soa/cancer_detection/test'
     cd = CancerDetection()
     cd.load_original_data(train_path, test_path)
     cd.generate_submit_file([('qweqwe', 1), ('asdfasdf', 0)], 'submit.csv')
+    for data in cd.test_data:
+        name = data.image_path[-3:]
+        if name not in ['jpg', 'bmp', 'tif']:
+            print(name)
