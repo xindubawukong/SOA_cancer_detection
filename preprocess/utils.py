@@ -10,7 +10,11 @@ def read_image(path, size):
     mask = np.zeros((m, n))
     for i in range(m):
         for j in range(n):
-            if (img[i][j][0] == img[i][j][1]) & (img[i][j][1] == img[i][j][2]):
+            r = int(img[i][j][0])
+            g = int(img[i][j][1])
+            b = int(img[i][j][2])
+            diff = max(abs(r-g), abs(g-b), abs(r-b))
+            if (diff < 20):
                 continue
             mask[i][j] = 1
             img[i][j] = [0, 0, 0]

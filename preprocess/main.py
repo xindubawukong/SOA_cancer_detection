@@ -94,7 +94,11 @@ def convert_img(path, size):
 	#print(miny)
 	#print(maxx)
 	#print(maxy)
-	#cv2.imwrite('test.png', f[minx:maxx][miny:maxy]) 			
+
+	# ===============================================================
+	# cv2.imwrite('ff.png', f) 	
+	# cv2.imwrite('gg.png', g) 				
+	# ===============================================================
 
 
 	# In[25]:
@@ -171,7 +175,50 @@ def convert_img(path, size):
 	#cv2.imwrite('dst.png', dst2)
 	#show(dst)
 	#show(dst2)
-	cv2.imwrite('dst.png', dst2)
+
+	#=============================================== added by dxy ==========================================
+
+	thresh = 0.4
+
+	left = 0
+	while (True):
+		rate = 1.0 * (dst2[left, :] > 0).sum() / dst2.shape[1]
+		if rate < thresh:
+			left += 1
+		else:
+			break
+	
+	right = dst2.shape[0] - 1
+	while (True):
+		rate = 1.0 * (dst2[right, :] > 0).sum() / dst2.shape[1]
+		if rate < thresh:
+			right -= 1
+		else:
+			break
+	
+	up = 0
+	while (True):
+		rate = 1.0 * (dst2[:, up] > 0).sum() / dst2.shape[0]
+		if rate < thresh:
+			up += 1
+		else:
+			break
+	
+	down = dst2.shape[1] - 1
+	while (True):
+		rate = 1.0 * (dst2[:, down] > 0).sum() / dst2.shape[0]
+		if rate < thresh:
+			down -= 1
+		else:
+			break
+	
+	dst2 = dst2[left+10:right-10, up+10:down-10]
+
+	cv2.imwrite('result_' + path, dst2)
 	return dst2
 
-#convert_img('temp.png', (512, 512))
+
+if __name__ == '__main__':
+	# convert_img('test1.png', (512, 512))
+	# convert_img('test2.png', (512, 512))
+	convert_img('test5.png', (512, 512))
