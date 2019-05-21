@@ -21,8 +21,8 @@ class TrainDataset(Dataset):
 
     def __getitem__(self, item):
         image_path, label = self.images[item]
-        image = read_image(image_path)
-        image = get_gray(image)  # No need to do this if the input image is gray
+        image = cv2.imread(image_path)
+        image = get_gray(image)
         image = cv2.resize(image, (512, 512))
         image = Image.fromarray(np.uint8(image))
         color_jitter = transforms.ColorJitter(64.0 / 255, 0.75, 0.25, 0.04)
@@ -33,6 +33,7 @@ class TrainDataset(Dataset):
         image = image.rotate(90 * num_rotate)
         image = np.asarray(image)
         image = image[None, :]
+#         image = image.transpose((2, 0, 1))
         image = (image / 255.0).astype(np.float32)
         return torch.from_numpy(image), torch.Tensor([label]).long()
 
@@ -51,8 +52,8 @@ class ValidDataset(Dataset):
 
     def __getitem__(self, item):
         image_path, label = self.images[item]
-        image = read_image(image_path)
-        image = get_gray(image)  # No need to do this if the input image is gray
+        image = cv2.imread(image_path)
+        image = get_gray(image)
         image = cv2.resize(image, (512, 512))
         image = image[None, :]
         image = (image / 255.0).astype(np.float32)
@@ -65,30 +66,29 @@ class TestDataset(Dataset):
     def __init__(self, data_list):
         self.images = []
         for data in data_list:
-            image_path = data.image_path
-            self.images.append(image_path)
+            self.images.append(data)
 
     def __len__(self):
         return len(self.images)
 
     def __getitem__(self, item):
-        image_path = self.images[item]
-        image = read_image(image_path)
-        image = get_gray(image)  # No need to do this if the input image is gray
+        data = self.images[item]
+        image_path = data.image_path
+        image = cv2.imread(image_path)
+        image = get_gray(image)
         image = cv2.resize(image, (512, 512))
         image = image[None, :]
         image = (image / 255.0).astype(np.float32)
-        return torch.from_numpy(image)
+        return torch.from_numpy(image), data
 
 
 if __name__ == '__main__':
-    train_path = '/Users/xdbwk/Desktop/thu32/soa/final-project/cancer_detection/train'
-    test_path = '/Users/xdbwk/Desktop/thu32/soa/final-project/cancer_detection/test'
+    train_path = '../../cancer_detection/train'
+    test_path = '../../cancer_detection/test'
     cd = CancerDetection()
     cd.load_original_data(train_path, test_path)
     trainset = TrainDataset(cd.train_data)
     validset = ValidDataset(cd.valid_data)
-    testset = TestDataset(cd.test_data)
     for image, label in validset:
-        print(image.size(), label)
+        print(image.size(), image.dtype, label)
         break

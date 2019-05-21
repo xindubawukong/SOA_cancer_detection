@@ -50,7 +50,7 @@ class CancerDetection(object):
                         continue
                     image_path = os.path.join(cur_dir, file)
                     data = Data(id=item[0], age=int(item[1]), HER2=int(item[2]), P53=bool(item[3]),
-                                sub_type=int(item[4]), image_path=image_path)
+                                sub_type=int(item[4]) - 1, image_path=image_path)
                     all_data.append(data)
         random.shuffle(all_data)
         self.train_data = all_data[:825]

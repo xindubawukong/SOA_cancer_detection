@@ -23,8 +23,8 @@ def train(net, device, train_dataset_loader, criterion, optimizer, epoch):
             optimizer.step()
             ll += loss.item()
             pred = outputs.argmax(dim=1, keepdim=True)
-            print('epoch = %s,  batch_id = %s,  loss = %s' % (cur_epoch, batch_id, loss.item()))
-            print(pred.view(-1), labels.view(-1))
+#             print('epoch = %s,  batch_id = %s,  loss = %s' % (cur_epoch, batch_id, loss.item()))
+#             print(pred.view(-1), labels.view(-1))
         print('epoch = %s,  loss = %s' % (cur_epoch, ll / len(train_dataset_loader)))
         torch.save(net.module.state_dict(), 'model/first_train/' + str(cur_epoch) + '.pt')
 
