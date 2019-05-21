@@ -46,6 +46,8 @@ class CancerDetection(object):
             path = os.path.join(train_path, 'images', item[0])
             for cur_dir, dirs, files in os.walk(path):
                 for file in files:
+                    if file[:5] != 'new1_':
+                        continue
                     image_path = os.path.join(cur_dir, file)
                     data = Data(id=item[0], age=int(item[1]), HER2=int(item[2]), P53=bool(item[3]),
                                 sub_type=int(item[4]), image_path=image_path)
@@ -63,6 +65,8 @@ class CancerDetection(object):
             path = os.path.join(test_path, 'images', item[0])
             for cur_dir, dirs, files in os.walk(path):
                 for file in files:
+                    if file[:5] != 'new1_':
+                        continue
                     image_path = os.path.join(cur_dir, file)
                     data = Data(id=item[0], age=int(item[1]), HER2=int(item[2]), P53=bool(item[3]),
                                 sub_type=None, image_path=image_path)
@@ -74,18 +78,14 @@ class CancerDetection(object):
     # Generate a submit file to path. The result should be a list. Each item of the list should be a tuple, with first
     # element is the patient id, and second element is the cancer sub-type.
     def generate_submit_file(self, result, path):
-        with open(path, 'w', newline='') as f:
+        with open(path, 'w') as f:
             writer = csv.writer(f)
             writer.writerows(result)
 
 
 if __name__ == '__main__':
-    train_path = '/Users/xdbwk/Desktop/thu32/soa/cancer_detection/train'
-    test_path = '/Users/xdbwk/Desktop/thu32/soa/cancer_detection/test'
+    train_path = '../../cancer_detection/train'
+    test_path = '../../cancer_detection/test'
     cd = CancerDetection()
     cd.load_original_data(train_path, test_path)
     cd.generate_submit_file([('qweqwe', 1), ('asdfasdf', 0)], 'submit.csv')
-    for data in cd.test_data:
-        name = data.image_path[-3:]
-        if name not in ['jpg', 'bmp', 'tif']:
-            print(name)
