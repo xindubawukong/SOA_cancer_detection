@@ -27,12 +27,16 @@ class VGG(nn.Module):
             nn.Linear(4096, num_classes),
         )
         self._initialize_weights()
+        
 
     def forward(self, x):
         x = self.features(x)
         x = x.view(x.size(0), -1)
+        # print(x.size())
+        # print(self.decomposition.fit_transform(x.view(6*512, -1).cpu()).cpu())
+        y = x
         x = self.classifier(x)
-        return x
+        return x, y
 
     def _initialize_weights(self):
         for m in self.modules():
